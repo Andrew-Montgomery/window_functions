@@ -135,7 +135,8 @@ void winConfinedGaussian_64f(double *dst, double sigma, int len)
 #undef G
 }
 
-static double acosh(double x)
+// Custom acosh()
+static double m_acosh(double x)
 {
     if(x < 1.0) {
         return (M_PI / 2.0) - atan(x / sqrt(1.0 - x*x));
@@ -151,14 +152,14 @@ void winDolphChebyshev_64f(double *dst, double alpha, int len)
         N = len - 1;
     } 
 
-    double b = cosh((1.0/N) * acosh(pow(10.0, alpha)));
+    double b = cosh((1.0/N) * m_acosh(pow(10.0, alpha)));
 
     for(int i = 0; i < N; i++) {
         double a = fabs(b * cos((M_PI * i) / N));
         double cheby = 0.0;
 
         if(a > 1) {
-            cheby = cosh(N * acosh(a));
+            cheby = cosh(N * m_acosh(a));
         } else {
             cheby = cos(N * acos(a));
         }
